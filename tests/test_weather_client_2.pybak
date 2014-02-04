@@ -1,0 +1,14 @@
+import unittest
+
+from mock import patch
+
+from weather_client import WeatherClient
+
+class WeatherClientTest(unittest.TestCase):
+    @patch('weather_client.requests', autospec=True)
+    def test_response(self, requests_mock):
+        requests_mock.get.return_value.content = '{"weather": "Nice, but a little cloudy."}'
+        client = WeatherClient()
+        self.assertEquals(client.get_weather(), "Nice, but a little cloudy.")
+
+        requests_mock.get.assert_called_with('http://www.mocky.io/v2/52f10541bf227bca03d8a14b')
